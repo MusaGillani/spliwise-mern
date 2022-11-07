@@ -1,0 +1,32 @@
+.form-max-w {
+  max-width: 400px;
+}
+
+.min-h {
+  min-height: 90vh;
+}
+
+.button-signup {
+  background-color: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 10px;
+  margin: 5px 0;
+  font-weight: bold;
+  background-color: #ff652f;
+  border-radius: .25rem;
+}
+
+.logo-alignment {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.logo {
+  min-height: 200px;
+  min-width: 200px;
+}

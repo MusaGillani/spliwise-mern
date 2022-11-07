@@ -1,0 +1,78 @@
+p {
+  margin: 0;
+}
+
+.dash-max-w {
+  max-width: 650px;
+}
+
+.dash-h {
+  height: 93vh;
+}
+
+.bg-grey {
+  background-color: #EEEEEE;
+}
+
+.btn-add-expense, .btn-settle {
+  border: 1px solid #cccccc;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.1);
+}
+
+.btn-add-expense {
+  background-color: #FF5216;
+}
+
+.btn-settle {
+  background-color: #5BC5A7;
+}
+
+.align-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.right-line {
+  border-right: 1px solid #dee2e6;
+}
+
+.positive {
+  color: #5BC5A7;
+}
+
+.negative {
+  color: #FF5216;
+}
+
+.balance-title, .neutral, .expense-headings {
+  color: #999999;
+}
+
+.balance-title {
+  font-size: .8rem;
+}
+
+.expense-headings {
+  font-size: .9rem;
+  font-weight: bold;
+  margin: .5rem;
+}
+
+.expense-entry {
+  color: #000000;
+  border: .15rem dashed ;
+  border-radius: 1rem;
+  padding: .5rem 1.2rem;
+}
+
+.text-right {
+  text-align: end;
+}
+
+.border-negative {
+  border-color: #FF5216;
+}
+
+.border-positive {
+  border-color: #5BC5A7;
+}

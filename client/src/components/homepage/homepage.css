@@ -1,0 +1,68 @@
+.body {
+  height: 93vh;
+}
+
+.bg-img {
+  background-image: url('../../assets/background.png');
+}
+
+.text {
+  font-size: 1.75rem;
+  color: #373B3F;
+  text-align: center;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.text-teal {
+  color: #1CC29F;
+}
+
+.signup {
+  color: white;
+  background-color: #18A582;
+  border-radius: .25rem;
+  width: fit-content;
+}
+
+.feat {
+  width: 50%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  margin-bottom: .5rem;
+}
+
+.block {
+  display: block;
+}
+
+.bg-charcoal {
+  background-color: #373B3F;
+}
+
+.bg-teal {
+  background-color: #1CC29F;
+}
+
+.bg-orange {
+  background-color: #f67240;
+}
+
+.asset-img {
+  width: 40%;
+  height: auto;
+}
+
+.outline {
+  border: 1px solid red;
+}

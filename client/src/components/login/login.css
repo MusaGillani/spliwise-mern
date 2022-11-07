@@ -1,0 +1,32 @@
+.max-w {
+  max-width: 500px;
+}
+
+.min-h {
+  min-height: 90vh;
+}
+
+.bg-img {
+  background-image: url('../../assets/background.png');
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 10px;
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.btn-login {
+  background-color: #18A582;
+  border-radius: .25rem;
+}
+
+.btn-forgot-pw {
+  color: #18A582;
+}
