@@ -6,7 +6,9 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -r dotenv/config dist/index.js\""
+    "compile:watch": "npx tsc --watch",
+    "pre:dev": "nodemon -r dotenv/config dist/index.js",
+    "dev": "concurrently --kill-others \"npm run compile:watch\" \"npm run pre:dev\""
   },
   "author": "",
   "license": "ISC",
