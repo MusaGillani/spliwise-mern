@@ -2,7 +2,7 @@ import { Express } from 'express'
 import { urlencoded, json } from 'body-parser'
 import morgan from 'morgan'
 
-import CONFIG from '../config'
+import { CONFIG } from '../config'
 
 const isProd = CONFIG.ENVIRONMENT === 'production'
 

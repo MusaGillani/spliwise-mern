@@ -1,11 +1,11 @@
 type DefaultConfig = {
-  PORT: Number
-  ENVIRONMENT?: String
+  PORT: number
+  ENVIRONMENT?: string
 }
 
 type Config = {
-  MONGO_URL: String
-  JWT_SECRET?: String
+  MONGO_URL: string
+  JWT_SECRET?: string
 }
 const devConfig: Config = {
   MONGO_URL: 'mongodb://localhost:27017/splitwise-dev',
@@ -21,7 +21,7 @@ const defaultConfig: DefaultConfig = {
   ENVIRONMENT: process.env.NODE_ENV
 }
 
-function envConfig(env?: String) {
+function envConfig(env?: string) {
   switch (env) {
     case 'development':
       return devConfig
@@ -30,4 +30,5 @@ function envConfig(env?: String) {
   }
 }
 
-export default { ...defaultConfig, ...envConfig(process.env.NODE_ENV) }
+export const CONFIG = { ...defaultConfig, ...envConfig(process.env.NODE_ENV) }
+export { db as connect } from './db'
