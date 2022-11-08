@@ -1,9 +1,9 @@
 import express, { Express, Request, Response } from 'express'
 import middlewares from './middleware'
 import routes from './routes'
-import { ENV } from './config'
+import CONFIG from './config'
 const app: Express = express()
-const port = ENV.PORT || 3000
+const port = CONFIG.PORT || 3000
 
 middlewares(app)
 routes(app)
