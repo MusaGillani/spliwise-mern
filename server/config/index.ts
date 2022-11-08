@@ -5,7 +5,7 @@ type DefaultConfig = {
 
 type Config = {
   MONGO_URL: string
-  JWT_SECRET?: string
+  JWT_SECRET: string
 }
 const devConfig: Config = {
   MONGO_URL: 'mongodb://localhost:27017/splitwise-dev',
@@ -13,7 +13,8 @@ const devConfig: Config = {
 }
 
 const prodConfig: Config = {
-  MONGO_URL: 'mongodb://localhost:27017/splitwise-prod'
+  MONGO_URL: 'mongodb://localhost:27017/splitwise-prod',
+  JWT_SECRET: process.env.JWT_SECRET!
 }
 
 const defaultConfig: DefaultConfig = {
