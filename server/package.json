@@ -6,27 +6,42 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    "compile:watch": "npx tsc --watch",
+    "pre:dev": "nodemon -r dotenv/config dist/index.js",
+    "dev": "concurrently --kill-others \"npm run compile:watch\" \"npm run pre:dev\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/mongoose-unique-validator": "^1.0.6",
+    "@types/passport": "^1.0.11",
+    "@types/passport-jwt": "^3.0.7",
     "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
     "concurrently": "^7.5.0",
     "express": "^4.18.2",
     "express-validator": "^6.14.2",
+    "http-status": "^1.5.3",
     "jsonwebtoken": "^8.5.1",
+    "mercedlogger": "^1.0.1",
     "mongoose": "^6.7.1",
-    "passport": "^0.6.0"
+    "mongoose-unique-validator": "^3.1.0",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.14",
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/morgan": "^1.9.3",
     "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
+    "dotenv": "^16.0.3",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
     "typescript": "^4.8.4"
   }
