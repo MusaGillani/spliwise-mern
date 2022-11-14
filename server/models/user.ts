@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import { hashSync, compareSync } from 'bcrypt'
 import { CONFIG } from '../config'
 
-interface IUSER {
+export interface IUSER {
   name: string
   email: string
   password: string
