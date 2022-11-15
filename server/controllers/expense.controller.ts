@@ -1,16 +1,14 @@
 import path from 'path'
 import { Request, Response } from 'express'
 import httpStatus from 'http-status'
-import { body, CustomValidator } from 'express-validator'
+import { param, body, CustomValidator } from 'express-validator'
+import { Types } from 'mongoose'
 import { authService } from '../services'
 import { Expense } from '../models'
 import { validate } from '../helpers'
 
-// TODO add authorization
-// TODO add cors headers
 async function addExpenseHandler(req: Request, res: Response) {
   try {
-    // console.log(req.user)
     const expense = await Expense.create({
       ...req.body,
       paidByMultiple: req.body.paidByMultiple === '' ? [] : req.body.paidByMultiple,
@@ -53,6 +51,32 @@ const addExpenseValidators = [
   body('users').exists().isArray({ min: 2 })
 ]
 
+async function getUserExpensesHandler(req: Request, res: Response) {
+  try {
+    const userExpenses = await Expense.find({
+      users: { $in: [req.params.userid] }
+    })
+      .select('-imageFile')
+      .populate({ path: 'users', select: 'name email' })
+    return res.status(httpStatus.OK).json(userExpenses)
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
+  }
+}
+
+const getUserExpensesValidators = [
+  param('userid')
+    .exists()
+    .withMessage('provide a userid')
+    .custom(value => Types.ObjectId.isValid(value))
+    .withMessage('enter a valid userid')
+]
+
 export default {
-  addExpense: [authService.authJWT, validate(addExpenseValidators), addExpenseHandler]
+  addExpense: [authService.authJWT, validate(addExpenseValidators), addExpenseHandler],
+  getUserExpenses: [
+    authService.authJWT,
+    validate(getUserExpensesValidators),
+    getUserExpensesHandler
+  ]
 }

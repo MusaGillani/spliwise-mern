@@ -5,4 +5,6 @@ const expenseRouter = Router()
 
 expenseRouter.post('/addExpense', ...expenseHandlers.addExpense)
 
+expenseRouter.get('/getUserExpenses/:userid', ...expenseHandlers.getUserExpenses)
+
 export { expenseRouter }
