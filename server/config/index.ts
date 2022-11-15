@@ -6,9 +6,11 @@ type DefaultConfig = {
 type Config = {
   MONGO_URL: string
   JWT_SECRET: string
+  REQ_BODY_LOG?: boolean
 }
 const devConfig: Config = {
   MONGO_URL: 'mongodb://localhost:27017/splitwise-dev',
+  REQ_BODY_LOG: typeof process.env.BODY_LOG !== 'undefined',
   JWT_SECRET: 'thisisasecret'
 }
 

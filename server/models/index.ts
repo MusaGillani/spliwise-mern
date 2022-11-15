@@ -1,3 +1,4 @@
 import User from './user'
+import Expense from './expense'
 
-export { User }
+export { User, Expense }

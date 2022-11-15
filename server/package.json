@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/mongoose-unique-validator": "^1.0.6",
+    "@types/multer": "^1.4.7",
     "@types/passport": "^1.0.11",
     "@types/passport-jwt": "^3.0.7",
     "bcrypt": "^5.1.0",
@@ -26,6 +27,7 @@
     "mercedlogger": "^1.0.1",
     "mongoose": "^6.7.1",
     "mongoose-unique-validator": "^3.1.0",
+    "multer": "^1.4.5-lts.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0"
   },

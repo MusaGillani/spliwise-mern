@@ -16,3 +16,7 @@ export const validate = (validations: any[]) => {
     })
   }
 }
+
+export const reqBodyTokenLog = (req: Request) => {
+  return JSON.stringify(req.body)
+}

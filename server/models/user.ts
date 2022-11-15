@@ -78,7 +78,7 @@ userSchema.methods = {
     return {
       _id: this._id,
       name: this.name,
-      token: `JWT ${this.createToken()}`
+      token: `${this.createToken()}`
     }
   },
   toJSON() {
