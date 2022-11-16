@@ -26,7 +26,7 @@ const expenseSchema = new Schema<IEXPENSE>({
   date: Date,
   description: String,
   imageFile: { file: Buffer, fileName: String },
-  paidBy: { type: Schema.Types.ObjectId, ref: 'User' },
+  paidBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   paidByMultiple: [
     {
       userid: { type: Schema.Types.ObjectId, ref: 'User', required: true },

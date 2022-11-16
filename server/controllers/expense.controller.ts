@@ -1,5 +1,5 @@
 import path from 'path'
-import e, { Request, Response } from 'express'
+import { Request, Response } from 'express'
 import httpStatus from 'http-status'
 import { param, body, CustomValidator } from 'express-validator'
 import { Types } from 'mongoose'
@@ -11,6 +11,7 @@ async function addExpenseHandler(req: Request, res: Response) {
   try {
     const expense = await Expense.create({
       ...req.body,
+      paidBy: req.body.paidBy === 'multiple' ? null : req.body.paidBy,
       paidByMultiple: req.body.paidByMultiple === '' ? [] : req.body.paidByMultiple,
       imageFile: { file: req.file!.buffer, fileName: req.file!.originalname }
     })
@@ -43,7 +44,11 @@ const addExpenseValidators = [
     .custom(isImageFile)
     .optional({ nullable: true })
     .withMessage('Please provide an image file'),
-  body('paidBy').exists().isString(),
+  body('paidBy')
+    .exists()
+    .isString()
+    .custom(value => (value !== 'multiple' ? Types.ObjectId.isValid(value) : true))
+    .withMessage('Provide a correct userId in paidBy'),
   body('paidByMultiple').exists().isArray().optional({ nullable: true, checkFalsy: true }),
   body('split').exists().isString(),
   body('splitValues').exists().isArray({ min: 2 }),
@@ -89,7 +94,7 @@ const getExpenseValidators = [
     .exists()
     .withMessage('provide an expenseId')
     .custom(value => Types.ObjectId.isValid(value))
-    .withMessage('enter a valid expenseId')
+    .withMessage('provide a valid expenseId')
 ]
 
 export default {
