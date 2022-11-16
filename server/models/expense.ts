@@ -1,7 +1,11 @@
 import { model, Schema, Types, Date } from 'mongoose'
-import { IUSER } from './user'
+import { IUSER } from '../models'
 
-interface IEXPENSE {
+interface ICOSTOBJECT {
+  userid: Types.ObjectId
+  value: Number
+}
+export interface IEXPENSE {
   addedBy: Types.ObjectId
   date: Date
   description: String
@@ -10,9 +14,9 @@ interface IEXPENSE {
     fileName: String
   }
   paidBy: Types.ObjectId
-  paidByMultiple: Types.DocumentArray<IUSER>
+  paidByMultiple: Types.Array<ICOSTOBJECT>
   split: String
-  splitValues: Types.DocumentArray<IUSER>
+  splitValues: Types.Array<ICOSTOBJECT>
   totalPrice: Number
   users: Types.DocumentArray<IUSER>
 }
