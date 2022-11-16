@@ -1,5 +1,5 @@
 import path from 'path'
-import { Request, Response } from 'express'
+import e, { Request, Response } from 'express'
 import httpStatus from 'http-status'
 import { param, body, CustomValidator } from 'express-validator'
 import { Types } from 'mongoose'
@@ -72,11 +72,32 @@ const getUserExpensesValidators = [
     .withMessage('enter a valid userid')
 ]
 
+async function getExpenseHandler(req: Request, res: Response) {
+  try {
+    const expense = await Expense.findById(req.params.expenseId).select('-imageFile')
+    if (!expense) {
+      return res.status(httpStatus.NOT_FOUND).json({ message: 'Expense Not found' })
+    }
+    return res.status(httpStatus.OK).json(expense)
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
+  }
+}
+
+const getExpenseValidators = [
+  param('expenseId')
+    .exists()
+    .withMessage('provide an expenseId')
+    .custom(value => Types.ObjectId.isValid(value))
+    .withMessage('enter a valid expenseId')
+]
+
 export default {
   addExpense: [authService.authJWT, validate(addExpenseValidators), addExpenseHandler],
   getUserExpenses: [
     authService.authJWT,
     validate(getUserExpensesValidators),
     getUserExpensesHandler
-  ]
+  ],
+  getExpense: [authService.authJWT, validate(getExpenseValidators), getExpenseHandler]
 }

@@ -7,4 +7,6 @@ expenseRouter.post('/addExpense', ...expenseHandlers.addExpense)
 
 expenseRouter.get('/getUserExpenses/:userid', ...expenseHandlers.getUserExpenses)
 
+expenseRouter.get('/getExpense/:expenseId', ...expenseHandlers.getExpense)
+
 export { expenseRouter }
