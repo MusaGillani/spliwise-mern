@@ -1,4 +1,4 @@
-import User from './user'
-import Expense from './expense'
+import User, { IUSER } from './user'
+import Expense, { IEXPENSE } from './expense'
 
-export { User, Expense }
+export { User, IUSER, Expense, IEXPENSE }
