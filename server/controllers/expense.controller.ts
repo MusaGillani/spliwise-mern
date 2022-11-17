@@ -80,9 +80,7 @@ const getUserExpensesValidators = [
 async function getExpenseHandler(req: Request, res: Response) {
   try {
     const expense = await Expense.findById(req.params.expenseId).select('-imageFile')
-    if (!expense) {
-      return res.status(httpStatus.NOT_FOUND).json({ message: 'Expense Not found' })
-    }
+    if (!expense) return res.status(httpStatus.NOT_FOUND).json({ message: 'Expense Not found' })
     return res.status(httpStatus.OK).json(expense)
   } catch (error) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
@@ -136,6 +134,24 @@ const updateExpenseValidators = [
     .withMessage('provide a valid userId')
 ]
 
+async function deleteExpenseHandler(req: Request, res: Response) {
+  try {
+    const deletedDoc = await Expense.findByIdAndDelete(req.params.expenseId)
+    if (!deletedDoc) return res.status(httpStatus.NOT_FOUND).json({ message: 'Expense Not found' })
+    return res.sendStatus(httpStatus.NO_CONTENT)
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
+  }
+}
+
+const deleteExpenseValidators = [
+  param('expenseId')
+    .exists()
+    .withMessage('provide an expenseId')
+    .custom(value => Types.ObjectId.isValid(value))
+    .withMessage('enter a valid expenseId')
+]
+
 export default {
   addExpense: [authService.authJWT, validate(addExpenseValidators), addExpenseHandler],
   getUserExpenses: [
@@ -144,5 +160,6 @@ export default {
     getUserExpensesHandler
   ],
   getExpense: [authService.authJWT, validate(getExpenseValidators), getExpenseHandler],
-  updateExpense: [authService.authJWT, validate(updateExpenseValidators), updateExpenseHandler]
+  updateExpense: [authService.authJWT, validate(updateExpenseValidators), updateExpenseHandler],
+  deleteExpense: [authService.authJWT, validate(deleteExpenseValidators), deleteExpenseHandler]
 }

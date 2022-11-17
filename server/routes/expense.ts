@@ -11,4 +11,5 @@ expenseRouter.get('/getExpense/:expenseId', ...expenseHandlers.getExpense)
 
 expenseRouter.patch('/updateExpense/:expenseId', ...expenseHandlers.updateExpense)
 
+expenseRouter.delete('/deleteExpense/:expenseId', ...expenseHandlers.deleteExpense)
 export { expenseRouter }
