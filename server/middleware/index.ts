@@ -1,8 +1,9 @@
 import { Express } from 'express'
 import { urlencoded, json } from 'body-parser'
 import passport from 'passport'
-import morgan, { token } from 'morgan'
 import multer, { memoryStorage } from 'multer'
+import compression from 'compression'
+import morgan, { token } from 'morgan'
 
 import { reqBodyTokenLog } from '../helpers'
 import { CONFIG } from '../config'
@@ -19,6 +20,8 @@ const middlewares = (app: Express) => {
     const body = CONFIG.REQ_BODY_LOG ? ':body' : ''
     const format = `:method :url :status ${body} :response-time ms - :res[content-length]`
     app.use(morgan(format))
+  } else {
+    app.use(compression())
   }
 }
 
