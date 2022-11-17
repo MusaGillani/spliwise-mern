@@ -9,4 +9,6 @@ expenseRouter.get('/getUserExpenses/:userid', ...expenseHandlers.getUserExpenses
 
 expenseRouter.get('/getExpense/:expenseId', ...expenseHandlers.getExpense)
 
+expenseRouter.patch('/updateExpense/:expenseId', ...expenseHandlers.updateExpense)
+
 export { expenseRouter }

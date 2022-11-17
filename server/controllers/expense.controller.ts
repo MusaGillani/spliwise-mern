@@ -4,7 +4,7 @@ import httpStatus from 'http-status'
 import { param, body, CustomValidator } from 'express-validator'
 import { Types } from 'mongoose'
 import { authService } from '../services'
-import { Expense } from '../models'
+import { Expense, IEXPENSE } from '../models'
 import { validate } from '../helpers'
 
 async function addExpenseHandler(req: Request, res: Response) {
@@ -97,6 +97,45 @@ const getExpenseValidators = [
     .withMessage('provide a valid expenseId')
 ]
 
+async function updateExpenseHandler(req: Request, res: Response) {
+  try {
+    const expense: IEXPENSE | null = await Expense.findById(req.params.expenseId)
+    if (!expense) {
+      return res.status(httpStatus.NOT_FOUND).json({ message: 'Expense Not found' })
+    }
+    const { users, splitValues, paidBy, paidByMultiple } = expense!
+    const { userId } = req.body
+
+    let updatedUsers: any[] = users.filter(user => !user.equals(userId))
+    let updatedSplitValues: any[] = splitValues.filter(obj => !obj.userid.equals(userId))
+    let updatedPaidByMultiple: any[] = paidByMultiple
+    if (paidBy === null)
+      updatedPaidByMultiple = paidByMultiple.filter(obj => !obj.userid.equals(userId))
+
+    await Expense.findByIdAndUpdate(req.params.expenseId, {
+      users: updatedUsers,
+      splitValues: updatedSplitValues,
+      paidByMultiple: updatedPaidByMultiple
+    })
+    return res.sendStatus(httpStatus.NO_CONTENT)
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
+  }
+}
+
+const updateExpenseValidators = [
+  param('expenseId')
+    .exists()
+    .withMessage('provide an expenseId')
+    .custom(value => Types.ObjectId.isValid(value))
+    .withMessage('enter a valid expenseId'),
+  body('userId')
+    .exists()
+    .withMessage('provide a userId')
+    .custom(value => Types.ObjectId.isValid(value))
+    .withMessage('provide a valid userId')
+]
+
 export default {
   addExpense: [authService.authJWT, validate(addExpenseValidators), addExpenseHandler],
   getUserExpenses: [
@@ -104,5 +143,6 @@ export default {
     validate(getUserExpensesValidators),
     getUserExpensesHandler
   ],
-  getExpense: [authService.authJWT, validate(getExpenseValidators), getExpenseHandler]
+  getExpense: [authService.authJWT, validate(getExpenseValidators), getExpenseHandler],
+  updateExpense: [authService.authJWT, validate(updateExpenseValidators), updateExpenseHandler]
 }
