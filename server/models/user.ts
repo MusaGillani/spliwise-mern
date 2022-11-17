@@ -84,7 +84,8 @@ userSchema.methods = {
   toJSON() {
     return {
       _id: this._id,
-      name: this.name
+      name: this.name,
+      email: this.email
     }
   }
 }
