@@ -1,18 +1,15 @@
 import { Request, Response } from 'express'
 import httpStatus from 'http-status'
-import { body, validationResult } from 'express-validator'
+import { body } from 'express-validator'
 import { User } from '../models'
+import { validate } from '../helpers'
 
 async function signUpHandler(req: Request, res: Response) {
   try {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      throw errors
-    }
     const user = await User.create(req.body)
     return res.status(httpStatus.CREATED).json(user.toAuthJSON())
   } catch (error) {
-    return res.status(httpStatus.BAD_REQUEST).json(error)
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
   }
 }
 
@@ -31,7 +28,7 @@ async function loginHandler(req: Request, res: Response) {
       return res.status(httpStatus.UNAUTHORIZED).json({ message: 'invalid password' })
     else return res.status(httpStatus.OK).json(user.toAuthJSON())
   } catch (error) {
-    return res.status(httpStatus.BAD_REQUEST).json(error)
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
   }
 }
 
@@ -41,6 +38,6 @@ const loginValidators = [
 ]
 
 export default {
-  signUp: [...signUpValidators, signUpHandler],
-  login: [...loginValidators, loginHandler]
+  signUp: [validate(signUpValidators), signUpHandler],
+  login: [validate(loginValidators), loginHandler]
 }

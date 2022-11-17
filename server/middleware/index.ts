@@ -1,8 +1,10 @@
 import { Express } from 'express'
 import { urlencoded, json } from 'body-parser'
 import passport from 'passport'
-import morgan from 'morgan'
+import morgan, { token } from 'morgan'
+import multer, { memoryStorage } from 'multer'
 
+import { reqBodyTokenLog } from '../helpers'
 import { CONFIG } from '../config'
 
 const isProd = CONFIG.ENVIRONMENT === 'production'
@@ -10,8 +12,14 @@ const isProd = CONFIG.ENVIRONMENT === 'production'
 const middlewares = (app: Express) => {
   app.use(json())
   app.use(urlencoded({ extended: false }))
+  app.use(multer({ storage: memoryStorage() }).single('imageFile'))
   app.use(passport.initialize())
-  if (!isProd) app.use(morgan('tiny'))
+  if (!isProd) {
+    token('body', reqBodyTokenLog)
+    const body = CONFIG.REQ_BODY_LOG ? ':body' : ''
+    const format = `:method :url :status ${body} :response-time ms - :res[content-length]`
+    app.use(morgan(format))
+  }
 }
 
 export default middlewares

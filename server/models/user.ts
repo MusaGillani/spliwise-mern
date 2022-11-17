@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import { hashSync, compareSync } from 'bcrypt'
 import { CONFIG } from '../config'
 
-interface IUSER {
+export interface IUSER {
   name: string
   email: string
   password: string
@@ -78,13 +78,14 @@ userSchema.methods = {
     return {
       _id: this._id,
       name: this.name,
-      token: `JWT ${this.createToken()}`
+      token: `${this.createToken()}`
     }
   },
   toJSON() {
     return {
       _id: this._id,
-      name: this.name
+      name: this.name,
+      email: this.email
     }
   }
 }
