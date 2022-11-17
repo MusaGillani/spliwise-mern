@@ -3,6 +3,6 @@ import userHandlers from '../controllers/user.controller'
 
 const userRouter = Router()
 
-userRouter.get('/getUsers', ...userHandlers.getUsers)
+userRouter.get('/all', ...userHandlers.getUsers)
 
 export { userRouter }

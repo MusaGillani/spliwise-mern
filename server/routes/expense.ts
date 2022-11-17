@@ -3,13 +3,14 @@ import expenseHandlers from '../controllers/expense.controller'
 
 const expenseRouter = Router()
 
-expenseRouter.post('/addExpense', ...expenseHandlers.addExpense)
+expenseRouter.post('/', ...expenseHandlers.addExpense)
 
-expenseRouter.get('/getUserExpenses/:userid', ...expenseHandlers.getUserExpenses)
+expenseRouter.get('/all/:userid', ...expenseHandlers.getUserExpenses)
 
-expenseRouter.get('/getExpense/:expenseId', ...expenseHandlers.getExpense)
+expenseRouter.get('/:expenseId', ...expenseHandlers.getExpense)
 
-expenseRouter.patch('/updateExpense/:expenseId', ...expenseHandlers.updateExpense)
+expenseRouter.patch('/:expenseId', ...expenseHandlers.updateExpense)
 
-expenseRouter.delete('/deleteExpense/:expenseId', ...expenseHandlers.deleteExpense)
+expenseRouter.delete('/:expenseId', ...expenseHandlers.deleteExpense)
+
 export { expenseRouter }
