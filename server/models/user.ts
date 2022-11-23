@@ -1,8 +1,7 @@
 import { model, Schema, Model } from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
-import jwt from 'jsonwebtoken'
 import { hashSync, compareSync } from 'bcrypt'
-import { CONFIG } from '../config'
+import { jwtService } from '../services'
 
 export interface IUSER {
   name: string
@@ -67,14 +66,11 @@ userSchema.methods = {
     return compareSync(password, this.password)
   },
   createToken() {
-    return jwt.sign(
+    return jwtService.generateToken(
       {
         _id: this._id
       },
-      CONFIG.JWT_SECRET,
-      {
-        expiresIn: '20s'
-      }
+      '20s'
     )
   },
   toAuthJSON() {
