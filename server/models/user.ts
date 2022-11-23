@@ -71,7 +71,10 @@ userSchema.methods = {
       {
         _id: this._id
       },
-      CONFIG.JWT_SECRET
+      CONFIG.JWT_SECRET,
+      {
+        expiresIn: '20s'
+      }
     )
   },
   toAuthJSON() {
