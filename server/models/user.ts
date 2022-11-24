@@ -12,12 +12,11 @@ export interface IUSER {
 interface IUserMethods {
   _hashPassword(password: string): string
   authenticateUser(password: string): boolean
-  createToken(): string
-  toAuthJSON(): {
+  toAuthJSON(): Promise<{
     _id: string
     name: string
     token: string
-  }
+  }>
   toJSON(): {
     _id: string
     name: string
@@ -65,19 +64,12 @@ userSchema.methods = {
   authenticateUser(password: string) {
     return compareSync(password, this.password)
   },
-  createToken() {
-    return jwtService.generateToken(
-      {
-        _id: this._id
-      },
-      '20s'
-    )
-  },
-  toAuthJSON() {
+  async toAuthJSON() {
     return {
       _id: this._id,
       name: this.name,
-      token: `${this.createToken()}`
+      token: `${jwtService.generateToken({ _id: this._id }, '20s')}`,
+      refreshToken: `${await jwtService.createRefreshToken(this._id)}`
     }
   },
   toJSON() {

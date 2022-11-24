@@ -7,7 +7,7 @@ import { validate } from '../helpers'
 async function signUpHandler(req: Request, res: Response) {
   try {
     const user = await User.create(req.body)
-    return res.status(httpStatus.CREATED).json(user.toAuthJSON())
+    return res.status(httpStatus.CREATED).json(await user.toAuthJSON())
   } catch (error) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
   }
@@ -26,7 +26,7 @@ async function loginHandler(req: Request, res: Response) {
     if (!user) return res.status(httpStatus.UNAUTHORIZED).json({ message: 'user does not exist' })
     else if (!user.authenticateUser(password))
       return res.status(httpStatus.UNAUTHORIZED).json({ message: 'invalid password' })
-    else return res.status(httpStatus.OK).json(user.toAuthJSON())
+    else return res.status(httpStatus.OK).json(await user.toAuthJSON())
   } catch (error) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
   }
