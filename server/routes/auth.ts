@@ -7,4 +7,6 @@ authRouter.post('/login', ...authHandlers.login)
 
 authRouter.post('/signUp', ...authHandlers.signUp)
 
+authRouter.post('/refresh', ...authHandlers.refresh)
+
 export { authRouter }

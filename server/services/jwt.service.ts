@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt, { JsonWebTokenError, JwtPayload, TokenExpiredError } from 'jsonwebtoken'
 import { v4 } from 'uuid'
 import { Token } from '../models'
 import { CONFIG } from '../config'
@@ -9,21 +9,18 @@ function generateToken(payload: jwt.JwtPayload, expiry: string) {
   })
 }
 
-function verifyToken(token: string): string | jwt.JwtPayload {
-  return jwt.verify(token, CONFIG.JWT_SECRET)
+function verifyToken(token: string): string | JwtPayload {
+  try {
+    const payload = jwt.verify(token, CONFIG.JWT_SECRET)
+    return payload
+  } catch (error) {
+    return ''
+  }
 }
 
-async function createRefreshToken(userId: string) {
-  const refreshToken = generateToken({ userId }, '1d')
-  const token = await Token.findOne({ userId })
-  let tokenFamily
-
-  if (token) {
-    ;({ tokenFamily } = token)
-    token.delete()
-  } else {
-    tokenFamily = v4()
-  }
+async function createRefreshToken(userId: string, family?: string) {
+  const tokenFamily = family ?? v4()
+  const refreshToken = generateToken({ userId, tokenFamily }, '1d')
 
   await Token.create({
     userId,
@@ -34,8 +31,35 @@ async function createRefreshToken(userId: string) {
   return refreshToken
 }
 
+async function checkIsValid(token: string, tokenFamily: string) {
+  return await Token.findOne({ tokenFamily, refreshToken: token })
+}
+
+async function checkTokenReuse(userId: string, tokenFamily: string): Promise<boolean> {
+  const reuseCheck = await Token.findOne({ tokenFamily })
+
+  if (reuseCheck !== null) {
+    await Token.deleteMany({ userId })
+    return true
+  }
+  return false
+}
+
+async function rotateRefreshToken(
+  token: string,
+  userId: string,
+  tokenFamily: string
+): Promise<string> {
+  const newToken = await createRefreshToken(userId, tokenFamily)
+  await Token.deleteOne({ refreshToken: token })
+  return newToken
+}
+
 export default {
   verifyToken,
   generateToken,
-  createRefreshToken
+  createRefreshToken,
+  checkTokenReuse,
+  rotateRefreshToken,
+  checkIsValid
 }

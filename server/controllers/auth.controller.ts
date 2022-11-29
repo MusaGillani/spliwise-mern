@@ -1,7 +1,8 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import httpStatus from 'http-status'
 import { body } from 'express-validator'
 import { User } from '../models'
+import { jwtService } from '../services'
 import { validate } from '../helpers'
 
 async function signUpHandler(req: Request, res: Response) {
@@ -37,7 +38,43 @@ const loginValidators = [
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
 ]
 
+async function refreshHandler(req: Request, res: Response) {
+  try {
+    const token = req.headers['authorization']!.split(' ')[1]
+    const payload = jwtService.verifyToken(token)
+    const { userId, tokenFamily } = payload as { userId: string; tokenFamily: string }
+    const isValid = await jwtService.checkIsValid(token, tokenFamily)
+    if (isValid === null) {
+      const reused = await jwtService.checkTokenReuse(userId, tokenFamily)
+      if (reused) return res.status(httpStatus.FORBIDDEN).json('reuse detected!')
+      else return res.sendStatus(httpStatus.UNAUTHORIZED)
+    } else {
+      const newRefreshToken = await jwtService.rotateRefreshToken(token, userId, tokenFamily)
+      const newAccessToken = jwtService.generateToken({ _id: userId }, '20s')
+      return res.status(httpStatus.CREATED).json({ newAccessToken, newRefreshToken })
+    }
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
+  }
+}
+
+function refreshValidator(req: Request, res: Response, next: NextFunction) {
+  try {
+    const header = req.headers['authorization']
+    if (typeof header === 'undefined') {
+      return res.sendStatus(httpStatus.UNAUTHORIZED)
+    } else {
+      const valid = jwtService.verifyToken(header.split(' ')[1])
+      if (valid) next()
+      else return res.sendStatus(httpStatus.UNAUTHORIZED)
+    }
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
+  }
+}
+
 export default {
   signUp: [validate(signUpValidators), signUpHandler],
-  login: [validate(loginValidators), loginHandler]
+  login: [validate(loginValidators), loginHandler],
+  refresh: [refreshValidator, refreshHandler]
 }
