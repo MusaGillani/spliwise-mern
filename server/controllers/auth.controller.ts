@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import httpStatus from 'http-status'
-import { body } from 'express-validator'
+import { body, param } from 'express-validator'
+import { Types } from 'mongoose'
 import { User } from '../models'
-import { jwtService } from '../services'
+import { jwtService, authService } from '../services'
 import { validate } from '../helpers'
 
 async function signUpHandler(req: Request, res: Response) {
@@ -73,8 +74,27 @@ function refreshValidator(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+async function logoutHandler(req: Request, res: Response) {
+  try {
+    const { userId } = req.params
+    await jwtService.deleteAllTokens(userId)
+    res.status(httpStatus.OK).json('logged out')
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error)
+  }
+}
+
+const logoutValidators = [
+  param('userId')
+    .exists()
+    .withMessage('provide a userId')
+    .custom(value => Types.ObjectId.isValid(value))
+    .withMessage('provide a valid userId')
+]
+
 export default {
   signUp: [validate(signUpValidators), signUpHandler],
   login: [validate(loginValidators), loginHandler],
-  refresh: [refreshValidator, refreshHandler]
+  refresh: [refreshValidator, refreshHandler],
+  delete: [authService.authJWT, validate(logoutValidators), logoutHandler]
 }

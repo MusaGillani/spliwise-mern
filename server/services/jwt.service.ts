@@ -39,7 +39,7 @@ async function checkTokenReuse(userId: string, tokenFamily: string): Promise<boo
   const reuseCheck = await Token.findOne({ tokenFamily })
 
   if (reuseCheck !== null) {
-    await Token.deleteMany({ userId })
+    await deleteAllTokens(userId)
     return true
   }
   return false
@@ -55,11 +55,16 @@ async function rotateRefreshToken(
   return newToken
 }
 
+async function deleteAllTokens(userId: string) {
+  await Token.deleteMany({ userId })
+}
+
 export default {
   verifyToken,
   generateToken,
   createRefreshToken,
   checkTokenReuse,
   rotateRefreshToken,
-  checkIsValid
+  checkIsValid,
+  deleteAllTokens
 }
