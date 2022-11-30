@@ -3,6 +3,7 @@ import { urlencoded, json } from 'body-parser'
 import passport from 'passport'
 import multer, { memoryStorage } from 'multer'
 import compression from 'compression'
+import helmet from 'helmet'
 import morgan, { token } from 'morgan'
 
 import { reqBodyTokenLog } from '../helpers'
@@ -22,6 +23,7 @@ const middlewares = (app: Express) => {
     app.use(morgan(format))
   } else {
     app.use(compression())
+    app.use(helmet())
   }
 }
 

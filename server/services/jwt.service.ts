@@ -1,4 +1,4 @@
-import jwt, { JsonWebTokenError, JwtPayload, TokenExpiredError } from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import { v4 } from 'uuid'
 import { Token } from '../models'
 import { CONFIG } from '../config'
