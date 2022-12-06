@@ -1,10 +1,9 @@
-
 {
   "arrowParens": "avoid",
   "bracketSpacing": true,
   "endOfLine": "lf",
-  "jsxBracketSameLine": false,
-  "jsxSingleQuote": true,
+  "tsxBracketSameLine": false,
+  "tsxSingleQuote": true,
   "no-duplicate-variable": [true, "check-parameters"],
   "no-var-keyword": true,
   "printWidth": 100,

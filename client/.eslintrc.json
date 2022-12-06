@@ -4,13 +4,13 @@
     "es2021": true
   },
   "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
     "plugin:prettier/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
-      "jsx": true
+      "tsx": true
     },
     "ecmaVersion": 12,
     "sourceType": "module"
@@ -48,11 +48,11 @@
       0,
       "double"
     ],
-    "jsx-quotes": [
+    "tsx-quotes": [
       2,
       "prefer-single"
     ],
-    "react/react-in-jsx-scope": 0,
+    "react/react-in-tsx-scope": 0,
     "react/display-name": 0,
     "react/prop-types": 0,
     "no-case-declarations": 0
